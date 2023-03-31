@@ -1,0 +1,20 @@
+# Disable random endermite spawning
+disable-endermites: true
+
+# Damage modifiers
+pearl-damage-self: 5
+pearl-damage-other: 2
+
+# Pearl cooldown in seconds
+pearl-cooldown: 0.5
+
+messages:
+  cooldown: "&cWait &f{time}&es&c to throw another pearl!"
+  stats: |-
+    &aFlamePearls&e by &bArkFlame Development
+    &r
+    &8 » &ePearls Damage: &f{damage}&c♥
+    &8 » &ePearls Damage &7(Self)&e: &f{damage=self}&c♥
+    &8 » &ePearls Cooldown: &f{cooldown}&as
+    &8 » &ePearls Thrown: &6{thrown}
+    &r
