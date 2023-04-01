@@ -6,18 +6,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.World;
 import org.bukkit.entity.EnderPearl;
-import org.bukkit.entity.Endermite;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -26,8 +21,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.projectiles.ProjectileSource;
 
+import com.arkflame.flamepearls.listeners.CreatureSpawnListener;
 import com.arkflame.flamepearls.listeners.ProjectileHitListener;
-import com.arkflame.flamepearls.utils.LocationUtil;
 
 public class FlamePearls extends JavaPlugin implements Listener {
 
@@ -43,6 +38,8 @@ public class FlamePearls extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(this, this);
         // Register ProjectileHitListener
         getServer().getPluginManager().registerEvents(new ProjectileHitListener(), this);
+        // Register CreatureSpawnListener
+        getServer().getPluginManager().registerEvents(new CreatureSpawnListener(), this);
     }
 
     private static FlamePearls instance;
@@ -146,14 +143,4 @@ public class FlamePearls extends JavaPlugin implements Listener {
             }
         }
     }
-
-    @EventHandler(ignoreCancelled = true)
-    public void onCreatureSpawn(CreatureSpawnEvent event) {
-        // Check if the creature is an endermite and the spawn reason is ender pearl
-        if (event.getEntity() instanceof Endermite) {
-            // Cancel the spawn event
-            event.setCancelled(true);
-        }
-    }
-
 }
