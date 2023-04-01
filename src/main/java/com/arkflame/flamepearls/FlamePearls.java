@@ -26,6 +26,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.projectiles.ProjectileSource;
 
+import com.arkflame.flamepearls.listeners.ProjectileHitListener;
 import com.arkflame.flamepearls.utils.LocationUtil;
 
 public class FlamePearls extends JavaPlugin implements Listener {
@@ -40,6 +41,8 @@ public class FlamePearls extends JavaPlugin implements Listener {
 
         // Register the event listener
         getServer().getPluginManager().registerEvents(this, this);
+        // Register ProjectileHitListener
+        getServer().getPluginManager().registerEvents(new ProjectileHitListener(), this);
     }
 
     private static FlamePearls instance;
@@ -59,7 +62,7 @@ public class FlamePearls extends JavaPlugin implements Listener {
         projectileOrigins.put(projectile, location);
     }
 
-    private Location getOriginAndRemove(Projectile projectile) {
+    public Location getOriginAndRemove(Projectile projectile) {
         // Return the value removed
         return projectileOrigins.remove(projectile);
     }
@@ -153,28 +156,4 @@ public class FlamePearls extends JavaPlugin implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
-    public void onProjectileHit(ProjectileHitEvent event) {
-        Projectile projectile = event.getEntity();
-
-        // Check if the projectile is an ender pearl
-        if (projectile instanceof EnderPearl) {
-            // Get the shooter of the pearl
-            Player player = (Player) projectile.getShooter();
-            // Get the location where the pearl landed
-            Location location = projectile.getLocation();
-            // Get the location where the pearl was thrown from
-            Location origin = getOriginAndRemove(projectile);
-            // Get the world of the location
-            World world = location.getWorld();
-            // Try to find the nearest safest position
-            Location safeLocation = LocationUtil.findSafeLocation(location, origin != null ? origin : location, world);
-            // Teleport the player to that location
-            player.teleport(safeLocation.setDirection(player.getLocation().getDirection()));
-            // Damage the player
-            player.damage(0, projectile);
-            // Play sound
-            world.playSound(safeLocation, Sound.ENDERMAN_TELEPORT, 5, 1f);
-        }
-    }
 }
