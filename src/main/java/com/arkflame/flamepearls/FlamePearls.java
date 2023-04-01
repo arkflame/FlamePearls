@@ -4,8 +4,10 @@ import java.text.DecimalFormat;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Endermite;
@@ -109,11 +111,11 @@ public class FlamePearls extends JavaPlugin implements Listener {
             EnderPearl pearl = (EnderPearl) event.getDamager();
             // Check if the pearl was thrown by a different entity than the shooter
             if (pearl.getShooter() != event.getEntity()) {
-                // Set the damage to 2
-                event.setDamage(2);
+                // Set the damage
+                event.setDamage(0);
             } else {
-                // Set the damage to 5
-                event.setDamage(5);
+                // Set the damage
+                event.setDamage(0);
             }
         }
     }
@@ -163,12 +165,25 @@ public class FlamePearls extends JavaPlugin implements Listener {
             Location safeLocation = findSafeLocation(location, origin != null ? origin : location, world);
             // Teleport the player to that location
             player.teleport(safeLocation.setDirection(player.getLocation().getDirection()));
+            // Damage the player
+            player.damage(0, projectile);
+            // Play sound
+            world.playSound(safeLocation, Sound.ENDERMAN_TELEPORT, 5, 1f);
         }
     }
 
     // A helper method that finds the nearest safest location from a given location,
     // origin and world
     private Location findSafeLocation(Location location, Location origin, World world) {
+        // Clone the original location
+        Location clone = location.clone();
+
+        // Check if location is already safe
+        if (clone.getBlock().getType() == Material.AIR && clone.add(0, 1, 0).getBlock().getType() == Material.AIR) {
+            // Return the fixed location
+            return location.getBlock().getLocation().add(0.5, 0, 0.5);
+        }
+
         // Get the coordinates of the location
         int x = location.getBlockX();
         int y = location.getBlockY();
@@ -188,28 +203,13 @@ public class FlamePearls extends JavaPlugin implements Listener {
                     // as the original location
                     Location newLocation = new Location(world, x + dx + 0.5, y, z + dz + 0.5, location.getYaw(),
                             location.getPitch());
-                    // Calculate the distance between the new location and the original location
-                    double distance = newLocation.distance(location);
+                    // Calculate the distance between the new location, the original and the origin
+                    double distance = newLocation.distance(location) + newLocation.distance(origin);
                     // Check if the distance is smaller than or equal to the minimum distance
                     if (distance <= minDistance) {
-                        // If the distance is equal to the minimum distance, compare the distance
-                        // between the new location and the origin with the distance between the best
-                        // location and the origin
-                        if (distance == minDistance && bestLocation != null) {
-                            // Calculate the distance between the new location and the origin
-                            double newOriginDistance = newLocation.distance(origin);
-                            // Calculate the distance between the best location and the origin
-                            double bestOriginDistance = bestLocation.distance(origin);
-                            // Check if the new origin distance is smaller than the best origin distance
-                            if (newOriginDistance < bestOriginDistance) {
-                                // Update the best location
-                                bestLocation = newLocation;
-                            }
-                        } else {
-                            // Update the minimum distance and the best location
-                            minDistance = distance;
-                            bestLocation = newLocation;
-                        }
+                        // Update the minimum distance and the best location
+                        minDistance = distance;
+                        bestLocation = newLocation;
                     }
                 }
             }

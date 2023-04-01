@@ -8,6 +8,9 @@ pearl-damage-other: 2
 # Pearl cooldown in seconds
 pearl-cooldown: 0.5
 
+# Sound played when teleporing
+pearl-sound: ENDERMAN_TELEPORT
+
 messages:
   cooldown: "&cWait &f{time}&es&c to throw another pearl!"
   stats: |-
