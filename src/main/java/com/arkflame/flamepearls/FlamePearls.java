@@ -46,14 +46,19 @@ public class FlamePearls extends JavaPlugin implements Listener {
         return FlamePearls.instance;
     }
 
+    // Origin of launch of projectiles
     private Map<Projectile, Location> projectileOrigins = new ConcurrentHashMap<>();
+
+    // Last time pearl was thrown by a player (Cooldown checks)
     private Map<Player, Long> lastPearlThrows = new ConcurrentHashMap<>();
 
     private void setOrigin(Projectile projectile, Location location) {
+        // Insert the projectile-origin
         projectileOrigins.put(projectile, location);
     }
 
     private Location getOriginAndRemove(Projectile projectile) {
+        // Return the value removed
         return projectileOrigins.remove(projectile);
     }
 
