@@ -1,27 +1,23 @@
 package com.arkflame.flamepearls;
 
-import java.text.DecimalFormat;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.projectiles.ProjectileSource;
 
 import com.arkflame.flamepearls.listeners.CreatureSpawnListener;
+import com.arkflame.flamepearls.listeners.PlayerInteractListener;
 import com.arkflame.flamepearls.listeners.ProjectileHitListener;
 
 public class FlamePearls extends JavaPlugin implements Listener {
@@ -36,10 +32,12 @@ public class FlamePearls extends JavaPlugin implements Listener {
 
         // Register the event listener
         getServer().getPluginManager().registerEvents(this, this);
-        // Register ProjectileHitListener
-        getServer().getPluginManager().registerEvents(new ProjectileHitListener(), this);
         // Register CreatureSpawnListener
         getServer().getPluginManager().registerEvents(new CreatureSpawnListener(), this);
+        // Register CreatureSpawnListener
+        getServer().getPluginManager().registerEvents(new PlayerInteractListener(), this);
+        // Register ProjectileHitListener
+        getServer().getPluginManager().registerEvents(new ProjectileHitListener(), this);
     }
 
     private static FlamePearls instance;
@@ -64,40 +62,16 @@ public class FlamePearls extends JavaPlugin implements Listener {
         return projectileOrigins.remove(projectile);
     }
 
-    @EventHandler
-    public void onPlayerInteract(PlayerInteractEvent event) {
-        // Check if the action is right click
-        if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            // Get the player who interacted
-            Player player = event.getPlayer();
+    public void updateLastPearl(Player player) {
+        lastPearlThrows.put(player, System.currentTimeMillis());
+    }
 
-            // Get the held item
-            ItemStack heldItem = player.getInventory().getItem(player.getInventory().getHeldItemSlot());
-
-            // Check if the player is holding an ender pearl in their main hand
-            if (heldItem != null && heldItem.getType() == Material.ENDER_PEARL) {
-                // Get the current time
-                long currentTime = System.currentTimeMillis();
-
-                // Get time since last pearl
-                long timeSinceLastPearl = currentTime - lastPearlThrows.getOrDefault(player, 0L);
-
-                // Check if enough time passed
-                if (timeSinceLastPearl < 500L) {
-                    // Create a decimal format object with 0.0 pattern
-                    DecimalFormat df = new DecimalFormat("0.0");
-                    // Apply the format to the time
-                    String cooldownSeconds = df.format(0.5 - timeSinceLastPearl / 1000D);
-                    // Cancel the interaction event
-                    event.setCancelled(true);
-                    // Send a message to the player
-                    player.sendMessage("You cannot throw ender pearls! Wait " + cooldownSeconds + "s");
-                } else {
-                    // Set the current time as last pearl thrown
-                    lastPearlThrows.put(player, currentTime);
-                }
-            }
-        }
+    public double getCooldown(Player player) {
+        // Get the time passed since last pearl in milliseconds
+        long timeSinceLastPearl = System.currentTimeMillis() - lastPearlThrows.getOrDefault(player, 0L);
+        
+        // Return the cooldown minus the time passed and convert to seconds
+        return (500 - Math.min(500, timeSinceLastPearl)) / 1000D;
     }
 
     @EventHandler(ignoreCancelled = true)
