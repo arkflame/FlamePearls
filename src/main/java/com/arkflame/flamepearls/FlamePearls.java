@@ -10,6 +10,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.arkflame.flamepearls.listeners.CreatureSpawnListener;
 import com.arkflame.flamepearls.listeners.EntityDamageByEntityListener;
 import com.arkflame.flamepearls.listeners.PlayerInteractListener;
+import com.arkflame.flamepearls.listeners.PlayerQuitListener;
 import com.arkflame.flamepearls.listeners.PlayerTeleportListener;
 import com.arkflame.flamepearls.listeners.ProjectileHitListener;
 import com.arkflame.flamepearls.listeners.ProjectileLaunchListener;
@@ -35,8 +36,10 @@ public class FlamePearls extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(new CreatureSpawnListener(), this);
         // Register EntityDamageByEntityListener
         getServer().getPluginManager().registerEvents(new EntityDamageByEntityListener(), this);
-        // Register CreatureSpawnListener
+        // Register Player Interact Listener
         getServer().getPluginManager().registerEvents(new PlayerInteractListener(), this);
+        // Register Player quit listener
+        getServer().getPluginManager().registerEvents(new PlayerQuitListener(), this);
         // Register PlayerTeleportListener
         getServer().getPluginManager().registerEvents(new PlayerTeleportListener(), this);
         // Register ProjectileHitListener
