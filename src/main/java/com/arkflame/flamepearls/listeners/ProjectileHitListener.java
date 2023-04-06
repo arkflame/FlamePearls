@@ -10,11 +10,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileHitEvent;
 
-import com.arkflame.flamepearls.FlamePearls;
+import com.arkflame.flamepearls.managers.OriginManager;
 import com.arkflame.flamepearls.utils.LocationUtil;
 
 public class ProjectileHitListener implements Listener {
+    private OriginManager originManager;
     
+    public ProjectileHitListener(OriginManager originManager) {
+        this.originManager = originManager;
+    }
+
     @EventHandler(ignoreCancelled = true)
     public void onProjectileHit(ProjectileHitEvent event) {
         Projectile projectile = event.getEntity();
@@ -26,7 +31,7 @@ public class ProjectileHitListener implements Listener {
             // Get the location where the pearl landed
             Location location = projectile.getLocation();
             // Get the location where the pearl was thrown from
-            Location origin = FlamePearls.getInstance().getOriginAndRemove(projectile);
+            Location origin = originManager.getOriginAndRemove(projectile);
             // Get the world of the location
             World world = location.getWorld();
             // Try to find the nearest safest position

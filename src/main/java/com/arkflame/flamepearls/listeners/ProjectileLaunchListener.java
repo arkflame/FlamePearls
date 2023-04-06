@@ -8,9 +8,15 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.projectiles.ProjectileSource;
 
-import com.arkflame.flamepearls.FlamePearls;
+import com.arkflame.flamepearls.managers.OriginManager;
 
 public class ProjectileLaunchListener implements Listener {
+    private OriginManager originManager;
+    
+    public ProjectileLaunchListener(OriginManager originManager) {
+        this.originManager = originManager;
+    }
+    
     @EventHandler(ignoreCancelled = true)
     public void onProjectileLaunch(ProjectileLaunchEvent event) {
         // Get the projectile
@@ -24,7 +30,7 @@ public class ProjectileLaunchListener implements Listener {
             // Check if shooter is entity
             if (shooter instanceof Player) {
                 // Set the origin to the shooter location
-                FlamePearls.getInstance().setOrigin(projectile, ((Player) shooter).getLocation());
+                originManager.setOrigin(projectile, ((Player) shooter).getLocation());
             }
         }
     }
