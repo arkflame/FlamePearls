@@ -17,7 +17,8 @@ messages:
     &aFlamePearls&e by &bArkFlame Development
     &r
     &8 » &ePearls Damage: &f{damage}&c♥
-    &8 » &ePearls Damage &7(Self)&e: &f{damage=self}&c♥
+    &8 » &ePearls Damage &7(Self)&e: &f{damage-self}&c♥
     &8 » &ePearls Cooldown: &f{cooldown}&as
+    &r
     &8 » &ePearls Thrown: &6{thrown}
     &r

@@ -8,16 +8,25 @@ import org.bukkit.entity.Projectile;
 
 // Stores and manages the origin of projectiles
 public class OriginManager {
-        // Origin of launch of projectiles
-        private Map<Projectile, Location> projectileOrigins = new ConcurrentHashMap<>();
-    
-        public void setOrigin(Projectile projectile, Location location) {
-            // Insert the projectile-origin
-            projectileOrigins.put(projectile, location);
-        }
-    
-        public Location getOriginAndRemove(Projectile projectile) {
-            // Return the value removed
-            return projectileOrigins.remove(projectile);
-        }
+    // Origin of launch of projectiles
+    private Map<Projectile, Location> projectileOrigins = new ConcurrentHashMap<>();
+
+    // Counter for times a projectile had been added
+    private int projectileCount = 0;
+
+    public void setOrigin(Projectile projectile, Location location) {
+        // Insert the projectile-origin
+        projectileOrigins.put(projectile, location);
+        // Add new projectile to count
+        projectileCount++;
+    }
+
+    public Location getOriginAndRemove(Projectile projectile) {
+        // Return the value removed
+        return projectileOrigins.remove(projectile);
+    }
+
+    public int getProjectileCount() {
+        return projectileCount;
+    }
 }
