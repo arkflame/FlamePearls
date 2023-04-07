@@ -5,6 +5,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.arkflame.flamepearls.commands.FlamePearlsCommand;
 import com.arkflame.flamepearls.config.GeneralConfigHolder;
 import com.arkflame.flamepearls.config.MessagesConfigHolder;
 import com.arkflame.flamepearls.listeners.CreatureSpawnListener;
@@ -71,6 +72,9 @@ public class FlamePearls extends JavaPlugin implements Listener {
         pluginManager.registerEvents(new ProjectileHitListener(originManager, generalConfigHolder), this);
         // Register ProjectileLaunchListener
         pluginManager.registerEvents(new ProjectileLaunchListener(originManager), this);
+
+        // Register FlamePearls command
+        getCommand("flamepearls").setExecutor(new FlamePearlsCommand(generalConfigHolder, originManager, messagesConfigHolder));
     }
 
     private static FlamePearls instance;

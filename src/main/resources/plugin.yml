@@ -6,5 +6,5 @@ version: ${version}
 url: ${url}
 commands:
   flamepearls:
-    description: "Safe pearl fixer by ArkFlame Development"
-    aliases: [ sfp ]
+    description: "FlamePearls improves general pearl behaviour and adds new mechanics."
+    aliases: [ pearls ]
