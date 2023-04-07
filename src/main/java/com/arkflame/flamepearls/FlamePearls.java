@@ -37,18 +37,15 @@ public class FlamePearls extends JavaPlugin implements Listener {
 
         // Get the plugin manager
         PluginManager pluginManager = getServer().getPluginManager();
-        // Get the config
-        Configuration config = getConfig();
 
         // Create general config
         generalConfigHolder = new GeneralConfigHolder();
-        // Load general config
-        generalConfigHolder.load(config);
 
         // Create messages config
         messagesConfigHolder = new MessagesConfigHolder();
-        // Load messages config
-        messagesConfigHolder.load(config);
+
+        // Reload configurations
+        loadConfigurationHolders();
 
         // Create the origin manager
         originManager = new OriginManager();
@@ -75,6 +72,17 @@ public class FlamePearls extends JavaPlugin implements Listener {
 
         // Register FlamePearls command
         getCommand("flamepearls").setExecutor(new FlamePearlsCommand(generalConfigHolder, originManager, messagesConfigHolder));
+    }
+
+    public void loadConfigurationHolders() {
+        // Reload config
+        reloadConfig();
+        // Get config
+        Configuration config = getConfig();
+        // Load general config
+        generalConfigHolder.load(config);
+        // Load messages config
+        messagesConfigHolder.load(config);
     }
 
     private static FlamePearls instance;
