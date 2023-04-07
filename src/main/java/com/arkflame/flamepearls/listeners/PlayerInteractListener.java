@@ -10,9 +10,15 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import com.arkflame.flamepearls.FlamePearls;
+import com.arkflame.flamepearls.managers.CooldownManager;
 
 public class PlayerInteractListener implements Listener {
+    private CooldownManager cooldownManager;
+
+    public PlayerInteractListener(CooldownManager cooldownManager) {
+        this.cooldownManager = cooldownManager;
+    }
+
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         // Check if the action is right click
@@ -26,7 +32,7 @@ public class PlayerInteractListener implements Listener {
             // Check if the player is holding an ender pearl in their main hand
             if (heldItem != null && heldItem.getType() == Material.ENDER_PEARL) {
                 // Get the cooldown time remaining
-                double cooldown = FlamePearls.getInstance().getCooldown(player);
+                double cooldown = cooldownManager.getCooldown(player);
                 
                 // Check if player has cooldown
                 if (cooldown > 0) {
@@ -40,7 +46,7 @@ public class PlayerInteractListener implements Listener {
                     player.sendMessage("You cannot throw ender pearls! Wait " + cooldownSeconds + "s");
                 } else {
                     // Set the current time as last pearl thrown
-                    FlamePearls.getInstance().updateLastPearl(player);
+                    cooldownManager.updateLastPearl(player);
                 }
             }
         }

@@ -1,10 +1,7 @@
 package com.arkflame.flamepearls;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.arkflame.flamepearls.listeners.CreatureSpawnListener;
@@ -14,10 +11,12 @@ import com.arkflame.flamepearls.listeners.PlayerQuitListener;
 import com.arkflame.flamepearls.listeners.PlayerTeleportListener;
 import com.arkflame.flamepearls.listeners.ProjectileHitListener;
 import com.arkflame.flamepearls.listeners.ProjectileLaunchListener;
+import com.arkflame.flamepearls.managers.CooldownManager;
 import com.arkflame.flamepearls.managers.OriginManager;
 
 public class FlamePearls extends JavaPlugin implements Listener {
     private static OriginManager originManager;
+    private static CooldownManager cooldownManager;
 
     @Override
     public void onEnable() {
@@ -27,25 +26,31 @@ public class FlamePearls extends JavaPlugin implements Listener {
         // Set static instance
         FlamePearls.instance = this;
 
+        // Get the plugin manager
+        PluginManager pluginManager = getServer().getPluginManager();
+
         // Create the origin manager
         originManager = new OriginManager();
 
+        // Create the cooldown manager
+        cooldownManager = new CooldownManager();
+
         // Register the event listener
-        getServer().getPluginManager().registerEvents(this, this);
+        pluginManager.registerEvents(this, this);
         // Register CreatureSpawnListener
-        getServer().getPluginManager().registerEvents(new CreatureSpawnListener(), this);
+        pluginManager.registerEvents(new CreatureSpawnListener(), this);
         // Register EntityDamageByEntityListener
-        getServer().getPluginManager().registerEvents(new EntityDamageByEntityListener(), this);
+        pluginManager.registerEvents(new EntityDamageByEntityListener(), this);
         // Register Player Interact Listener
-        getServer().getPluginManager().registerEvents(new PlayerInteractListener(), this);
+        pluginManager.registerEvents(new PlayerInteractListener(cooldownManager), this);
         // Register Player quit listener
-        getServer().getPluginManager().registerEvents(new PlayerQuitListener(), this);
+        pluginManager.registerEvents(new PlayerQuitListener(cooldownManager), this);
         // Register PlayerTeleportListener
-        getServer().getPluginManager().registerEvents(new PlayerTeleportListener(), this);
+        pluginManager.registerEvents(new PlayerTeleportListener(), this);
         // Register ProjectileHitListener
-        getServer().getPluginManager().registerEvents(new ProjectileHitListener(originManager), this);
+        pluginManager.registerEvents(new ProjectileHitListener(originManager), this);
         // Register ProjectileLaunchListener
-        getServer().getPluginManager().registerEvents(new ProjectileLaunchListener(originManager), this);
+        pluginManager.registerEvents(new ProjectileLaunchListener(originManager), this);
     }
 
     private static FlamePearls instance;
@@ -60,23 +65,11 @@ public class FlamePearls extends JavaPlugin implements Listener {
     public static OriginManager getOriginManager() {
         return originManager;
     }
-    
-    // Last time pearl was thrown by a player (Cooldown checks)
-    private Map<Player, Long> lastPearlThrows = new ConcurrentHashMap<>();
 
-    public void updateLastPearl(Player player) {
-        lastPearlThrows.put(player, System.currentTimeMillis());
-    }
-
-    public double getCooldown(Player player) {
-        // Get the time passed since last pearl in milliseconds
-        long timeSinceLastPearl = System.currentTimeMillis() - lastPearlThrows.getOrDefault(player, 0L);
-        
-        // Return the cooldown minus the time passed and convert to seconds
-        return (500 - Math.min(500, timeSinceLastPearl)) / 1000D;
-    }
-
-    public void resetCooldown(Player player) {
-        lastPearlThrows.remove(player);
+    /**
+     * Use this to get and manage the ender pearl cooldown of players
+     */
+    public static CooldownManager getCooldownManager() {
+        return cooldownManager;
     }
 }
