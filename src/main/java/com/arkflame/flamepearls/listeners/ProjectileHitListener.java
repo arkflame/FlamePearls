@@ -10,14 +10,17 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileHitEvent;
 
+import com.arkflame.flamepearls.config.GeneralConfigHolder;
 import com.arkflame.flamepearls.managers.OriginManager;
 import com.arkflame.flamepearls.utils.LocationUtil;
 
 public class ProjectileHitListener implements Listener {
     private OriginManager originManager;
-    
-    public ProjectileHitListener(OriginManager originManager) {
+    private Sound sound;
+
+    public ProjectileHitListener(OriginManager originManager, GeneralConfigHolder generalConfigHolder) {
         this.originManager = originManager;
+        this.sound = generalConfigHolder.getPearlSound();
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -40,8 +43,11 @@ public class ProjectileHitListener implements Listener {
             player.teleport(safeLocation.setDirection(player.getLocation().getDirection()));
             // Damage the player
             player.damage(0, projectile);
-            // Play sound
-            world.playSound(safeLocation, Sound.ENDERMAN_TELEPORT, 5, 1f);
+            // Check if sound is defined
+            if (sound != null) {
+                // Play sound
+                world.playSound(safeLocation, sound, 5, 1f);
+            }
         }
     }
 }

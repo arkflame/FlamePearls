@@ -12,7 +12,7 @@ pearl-cooldown: 0.5
 pearl-sound: ENDERMAN_TELEPORT
 
 messages:
-  cooldown: "&cWait &f{time}&es&c to throw another pearl!"
+  cooldown: "&cWait &e{time}&fs&c to throw another pearl!"
   stats: |-
     &aFlamePearls&e by &bArkFlame Development
     &r

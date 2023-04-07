@@ -10,13 +10,16 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import com.arkflame.flamepearls.config.MessagesConfigHolder;
 import com.arkflame.flamepearls.managers.CooldownManager;
 
 public class PlayerInteractListener implements Listener {
     private CooldownManager cooldownManager;
+    private MessagesConfigHolder messagesConfigHolder;
 
-    public PlayerInteractListener(CooldownManager cooldownManager) {
+    public PlayerInteractListener(CooldownManager cooldownManager, MessagesConfigHolder messagesConfigHolder) {
         this.cooldownManager = cooldownManager;
+        this.messagesConfigHolder = messagesConfigHolder;
     }
 
     @EventHandler
@@ -43,7 +46,7 @@ public class PlayerInteractListener implements Listener {
                     // Cancel the interaction event
                     event.setCancelled(true);
                     // Send a message to the player
-                    player.sendMessage("You cannot throw ender pearls! Wait " + cooldownSeconds + "s");
+                    player.sendMessage(messagesConfigHolder.getMessage("cooldown").replace("{time}", cooldownSeconds));
                 } else {
                     // Set the current time as last pearl thrown
                     cooldownManager.updateLastPearl(player);

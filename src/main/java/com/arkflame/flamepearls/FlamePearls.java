@@ -1,9 +1,12 @@
 package com.arkflame.flamepearls;
 
+import org.bukkit.configuration.Configuration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.arkflame.flamepearls.config.GeneralConfigHolder;
+import com.arkflame.flamepearls.config.MessagesConfigHolder;
 import com.arkflame.flamepearls.listeners.CreatureSpawnListener;
 import com.arkflame.flamepearls.listeners.EntityDamageByEntityListener;
 import com.arkflame.flamepearls.listeners.PlayerInteractListener;
@@ -15,40 +18,57 @@ import com.arkflame.flamepearls.managers.CooldownManager;
 import com.arkflame.flamepearls.managers.OriginManager;
 
 public class FlamePearls extends JavaPlugin implements Listener {
-    private static OriginManager originManager;
-    private static CooldownManager cooldownManager;
+    // Managers
+    private OriginManager originManager;
+    private CooldownManager cooldownManager;
+
+    // Config
+    private GeneralConfigHolder generalConfigHolder;
+    private MessagesConfigHolder messagesConfigHolder;
 
     @Override
     public void onEnable() {
         // Save default config
-        this.saveDefaultConfig();
+        saveDefaultConfig();
 
         // Set static instance
         FlamePearls.instance = this;
 
         // Get the plugin manager
         PluginManager pluginManager = getServer().getPluginManager();
+        // Get the config
+        Configuration config = getConfig();
+
+        // Create general config
+        generalConfigHolder = new GeneralConfigHolder();
+        // Load general config
+        generalConfigHolder.load(config);
+
+        // Create messages config
+        messagesConfigHolder = new MessagesConfigHolder();
+        // Load messages config
+        messagesConfigHolder.load(config);
 
         // Create the origin manager
         originManager = new OriginManager();
 
         // Create the cooldown manager
-        cooldownManager = new CooldownManager();
+        cooldownManager = new CooldownManager(generalConfigHolder);
 
         // Register the event listener
         pluginManager.registerEvents(this, this);
         // Register CreatureSpawnListener
-        pluginManager.registerEvents(new CreatureSpawnListener(), this);
+        pluginManager.registerEvents(new CreatureSpawnListener(generalConfigHolder), this);
         // Register EntityDamageByEntityListener
-        pluginManager.registerEvents(new EntityDamageByEntityListener(), this);
+        pluginManager.registerEvents(new EntityDamageByEntityListener(generalConfigHolder), this);
         // Register Player Interact Listener
-        pluginManager.registerEvents(new PlayerInteractListener(cooldownManager), this);
+        pluginManager.registerEvents(new PlayerInteractListener(cooldownManager, messagesConfigHolder), this);
         // Register Player quit listener
         pluginManager.registerEvents(new PlayerQuitListener(cooldownManager), this);
         // Register PlayerTeleportListener
         pluginManager.registerEvents(new PlayerTeleportListener(), this);
         // Register ProjectileHitListener
-        pluginManager.registerEvents(new ProjectileHitListener(originManager), this);
+        pluginManager.registerEvents(new ProjectileHitListener(originManager, generalConfigHolder), this);
         // Register ProjectileLaunchListener
         pluginManager.registerEvents(new ProjectileLaunchListener(originManager), this);
     }
@@ -62,14 +82,14 @@ public class FlamePearls extends JavaPlugin implements Listener {
     /**
      * Use this to get and manage the origin of ender pearls thrown.
      */
-    public static OriginManager getOriginManager() {
+    public OriginManager getOriginManager() {
         return originManager;
     }
 
     /**
      * Use this to get and manage the ender pearl cooldown of players
      */
-    public static CooldownManager getCooldownManager() {
+    public CooldownManager getCooldownManager() {
         return cooldownManager;
     }
 }
