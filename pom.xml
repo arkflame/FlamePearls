@@ -13,7 +13,7 @@
     <url>https://github.com/arkflame/flamepearls</url>
 
     <properties>
-        <author>2LStudios</author>
+        <author>ArkFlame Development</author>
         <mainClass>com.arkflame.flamepearls.FlamePearls</mainClass>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
