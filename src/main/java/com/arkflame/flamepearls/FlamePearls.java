@@ -29,9 +29,6 @@ public class FlamePearls extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-        // Save default config
-        saveDefaultConfig();
-
         // Set static instance
         FlamePearls.instance = this;
 
@@ -75,6 +72,8 @@ public class FlamePearls extends JavaPlugin implements Listener {
     }
 
     public void loadConfigurationHolders() {
+        // Regenerate config
+        saveDefaultConfig();
         // Reload config
         reloadConfig();
         // Get config
