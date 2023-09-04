@@ -30,23 +30,25 @@ public class ProjectileHitListener implements Listener {
         // Check if the projectile is an ender pearl
         if (projectile instanceof EnderPearl) {
             // Get the shooter of the pearl
-            Player player = (Player) projectile.getShooter();
-            // Get the location where the pearl landed
-            Location location = projectile.getLocation();
-            // Get the location where the pearl was thrown from
-            Location origin = originManager.getOriginAndRemove(projectile);
-            // Get the world of the location
-            World world = location.getWorld();
-            // Try to find the nearest safest position
-            Location safeLocation = LocationUtil.findSafeLocation(location, origin != null ? origin : location, world);
-            // Teleport the player to that location
-            player.teleport(safeLocation.setDirection(player.getLocation().getDirection()));
-            // Damage the player
-            player.damage(0, projectile);
-            // Check if sound is defined
-            if (sound != null) {
-                // Play sound
-                world.playSound(safeLocation, sound, 5, 1f);
+            if (projectile.getShooter() instanceof Player) {
+                Player player = (Player) projectile.getShooter();
+                // Get the location where the pearl landed
+                Location location = projectile.getLocation();
+                // Get the location where the pearl was thrown from
+                Location origin = originManager.getOriginAndRemove(projectile);
+                // Get the world of the location
+                World world = location.getWorld();
+                // Try to find the nearest safest position
+                Location safeLocation = LocationUtil.findSafeLocation(location, origin != null ? origin : location, world);
+                // Teleport the player to that location
+                player.teleport(safeLocation.setDirection(player.getLocation().getDirection()));
+                // Damage the player
+                player.damage(0, projectile);
+                // Check if sound is defined
+                if (sound != null) {
+                    // Play sound
+                    world.playSound(safeLocation, sound, 5, 1f);
+                }
             }
         }
     }
