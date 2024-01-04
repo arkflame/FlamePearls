@@ -61,7 +61,7 @@ public class FlamePearls extends JavaPlugin implements Listener {
         // Register Player quit listener
         pluginManager.registerEvents(new PlayerQuitListener(cooldownManager), this);
         // Register PlayerTeleportListener
-        pluginManager.registerEvents(new PlayerTeleportListener(), this);
+        pluginManager.registerEvents(new PlayerTeleportListener(originManager), this);
         // Register ProjectileHitListener
         pluginManager.registerEvents(new ProjectileHitListener(originManager, generalConfigHolder), this);
         // Register ProjectileLaunchListener

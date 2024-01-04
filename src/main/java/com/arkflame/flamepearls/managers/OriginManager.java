@@ -1,15 +1,20 @@
 package com.arkflame.flamepearls.managers;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 
 // Stores and manages the origin of projectiles
 public class OriginManager {
     // Origin of launch of projectiles
     private Map<Projectile, Location> projectileOrigins = new ConcurrentHashMap<>();
+    // Players that will teleport
+    private Collection<Player> willTeleport = new HashSet<>();
 
     // Counter for times a projectile had been added
     private int projectileCount = 0;
@@ -28,5 +33,17 @@ public class OriginManager {
 
     public int getProjectileCount() {
         return projectileCount;
+    }
+
+    public void setAsWillTeleport(Player player) {
+        willTeleport.add(player);
+    }
+
+    public boolean canTeleport(Player player) {
+        return willTeleport.contains(player);
+    }
+
+    public void setAsTeleported(Player player) {
+        willTeleport.remove(player);
     }
 }

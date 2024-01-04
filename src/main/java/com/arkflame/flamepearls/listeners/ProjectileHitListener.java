@@ -9,6 +9,7 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.projectiles.ProjectileSource;
 
 import com.arkflame.flamepearls.config.GeneralConfigHolder;
@@ -45,12 +46,11 @@ public class ProjectileHitListener implements Listener {
                     // Get the world of the location
                     World world = location.getWorld();
                     // Try to find the nearest safest position
-                    Location safeLocation = LocationUtil.findSafeLocation(location, origin != null ? origin : location,
-                            world);
+                    Location safeLocation = LocationUtil.findSafeLocation(location, origin != null ? origin : location, world);
+                    // Will teleport
+                    originManager.setAsWillTeleport(player);
                     // Teleport the player to that location
-                    player.teleport(safeLocation.setDirection(player.getLocation().getDirection()));
-                    // Damage the player
-                    player.damage(0, projectile);
+                    player.teleport(safeLocation.setDirection(player.getLocation().getDirection()), TeleportCause.ENDER_PEARL);
                     // Check if sound is defined
                     if (sound != null) {
                         // Play sound
