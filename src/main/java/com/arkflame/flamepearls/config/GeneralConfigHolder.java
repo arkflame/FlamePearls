@@ -8,6 +8,7 @@ import com.arkflame.flamepearls.FlamePearls;
 public class GeneralConfigHolder {
     // Disable random endermite spawning
     private boolean disableEndermites = true;
+    private double endermiteChance = 0.0;
 
     // Damage modifiers
     private double pearlDamageSelf = 5;
@@ -22,6 +23,7 @@ public class GeneralConfigHolder {
     public void load(Configuration config) {
         // Load disable endermites
         disableEndermites = config.getBoolean("disable-endermites", disableEndermites);
+        endermiteChance = config.getDouble("endermite-chance", endermiteChance);
 
         // Load pearl damage self
         pearlDamageSelf = config.getDouble("pearl-damage-self", pearlDamageSelf);
@@ -62,5 +64,9 @@ public class GeneralConfigHolder {
 
     public Sound getPearlSound() {
         return pearlSound;
+    }
+
+    public double getEndermiteChance() {
+        return endermiteChance;
     }
 }

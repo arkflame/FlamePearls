@@ -1,6 +1,9 @@
 # Disable random endermite spawning
 disable-endermites: true
 
+# Chance to spawn an endermite
+endermite-chance: 0.1
+
 # Damage modifiers
 pearl-damage-self: 5
 pearl-damage-other: 2

@@ -19,10 +19,12 @@ import com.arkflame.flamepearls.utils.LocationUtil;
 public class ProjectileHitListener implements Listener {
     private OriginManager originManager;
     private Sound sound;
+    private double endermiteChance;
 
     public ProjectileHitListener(OriginManager originManager, GeneralConfigHolder generalConfigHolder) {
         this.originManager = originManager;
         this.sound = generalConfigHolder.getPearlSound();
+        this.endermiteChance = generalConfigHolder.getEndermiteChance();
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -51,6 +53,10 @@ public class ProjectileHitListener implements Listener {
                     originManager.setAsWillTeleport(player);
                     // Teleport the player to that location
                     player.teleport(safeLocation.setDirection(player.getLocation().getDirection()), TeleportCause.ENDER_PEARL);
+                    // Spawn endermite if chance is higher
+                    if (endermiteChance > Math.random()) {
+                        world.spawnEntity(safeLocation, org.bukkit.entity.EntityType.ENDERMITE);
+                    }
                     // Check if sound is defined
                     if (sound != null) {
                         // Play sound
