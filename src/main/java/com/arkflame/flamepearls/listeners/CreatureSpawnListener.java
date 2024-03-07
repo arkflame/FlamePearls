@@ -16,10 +16,12 @@ public class CreatureSpawnListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onCreatureSpawn(CreatureSpawnEvent event) {
+        boolean disableEndermites = generalConfigHolder.isDisableEndermites();
+        if (!disableEndermites) { return; }
         // Check if the creature is an endermite and the spawn reason is ender pearl
         if (event.getEntity() instanceof Endermite) {
             // Cancel the spawn event if disable config is true
-            event.setCancelled(generalConfigHolder.isDisableEndermites());
+            event.setCancelled(true);
         }
     }
 }
