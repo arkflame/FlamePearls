@@ -2,6 +2,7 @@ package com.arkflame.flamepearls.listeners;
 
 import java.text.DecimalFormat;
 
+import com.arkflame.flamepearls.utils.MessageUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -46,7 +47,8 @@ public class PlayerInteractListener implements Listener {
                     // Cancel the interaction event
                     event.setCancelled(true);
                     // Send a message to the player
-                    player.sendMessage(messagesConfigHolder.getMessage("cooldown").replace("{time}", cooldownSeconds));
+                    MessageUtil.sendMessage(player, messagesConfigHolder.getMessage("cooldown")
+                            .replace("{time}", cooldownSeconds));
                     // We have to update the inventory to fix the "double click" issue.
                     // Because of the cooldown, the ender pearls in your inventory are taken away by 2 instead of 1.
                     player.updateInventory();
