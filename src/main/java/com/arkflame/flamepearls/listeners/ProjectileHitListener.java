@@ -48,7 +48,7 @@ public class ProjectileHitListener implements Listener {
                     // Get the world of the location
                     World world = location.getWorld();
                     // Try to find the nearest safest position
-                    Location safeLocation = LocationUtil.findSafeLocation(location, origin != null ? origin : location, world);
+                    Location safeLocation = LocationUtil.findSafeLocation(location, origin, world);
                     // Will teleport
                     originManager.setAsWillTeleport(player);
                     // Teleport the player to that location
