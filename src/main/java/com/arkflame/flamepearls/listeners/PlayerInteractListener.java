@@ -49,9 +49,6 @@ public class PlayerInteractListener implements Listener {
                     // Send a message to the player
                     MessageUtil.sendMessage(player, messagesConfigHolder.getMessage("cooldown")
                             .replace("{time}", cooldownSeconds));
-                    // We have to update the inventory to fix the "double click" issue.
-                    // Because of the cooldown, the ender pearls in your inventory are taken away by 2 instead of 1.
-                    player.updateInventory();
                 } else {
                     // Set the current time as last pearl thrown
                     cooldownManager.updateLastPearl(player);
