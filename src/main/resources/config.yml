@@ -5,6 +5,7 @@ disable-endermites: true
 endermite-chance: 0.1
 
 # Damage modifiers
+# Set the value to -1 for disable.
 pearl-damage-self: 5
 pearl-damage-other: 2
 
