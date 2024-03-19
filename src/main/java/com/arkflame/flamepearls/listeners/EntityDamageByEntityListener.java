@@ -1,5 +1,6 @@
 package com.arkflame.flamepearls.listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
@@ -25,12 +26,11 @@ public class EntityDamageByEntityListener implements Listener {
             // Get the player and the ender pearl
             EnderPearl pearl = (EnderPearl) damager;
             // Check if the pearl was thrown by a different entity than the shooter
-            if (pearl.getShooter() != event.getEntity()) {
-                // Set the other damage
-                event.setDamage(generalConfigHolder.getPearlDamageOther());
-            } else {
-                // Set the self damage
-                event.setDamage(generalConfigHolder.getPearlDamageSelf());
+            double damage = pearl.getShooter() != event.getEntity()? generalConfigHolder.getPearlDamageOther()
+                    : generalConfigHolder.getPearlDamageSelf();
+
+            if(damage >= 0) {
+                event.setDamage(damage);
             }
         }
     }

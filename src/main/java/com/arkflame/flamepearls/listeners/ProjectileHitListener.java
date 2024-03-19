@@ -20,11 +20,13 @@ public class ProjectileHitListener implements Listener {
     private OriginManager originManager;
     private Sound sound;
     private double endermiteChance;
+    private GeneralConfigHolder generalConfigHolder;
 
     public ProjectileHitListener(OriginManager originManager, GeneralConfigHolder generalConfigHolder) {
         this.originManager = originManager;
         this.sound = generalConfigHolder.getPearlSound();
         this.endermiteChance = generalConfigHolder.getEndermiteChance();
+        this.generalConfigHolder = generalConfigHolder;
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -53,6 +55,11 @@ public class ProjectileHitListener implements Listener {
                     originManager.setAsWillTeleport(player);
                     // Teleport the player to that location
                     player.teleport(safeLocation.setDirection(player.getLocation().getDirection()), TeleportCause.ENDER_PEARL);
+                    // Dealing damage to the player as done in vanilla when teleporting.
+                    double damage = generalConfigHolder.getPearlDamageSelf();
+                    if(damage >= 0) {
+                        player.damage(damage);
+                    }
                     // Spawn endermite if chance is higher
                     if (endermiteChance > Math.random()) {
                         world.spawnEntity(safeLocation, org.bukkit.entity.EntityType.ENDERMITE);
