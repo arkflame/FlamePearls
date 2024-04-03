@@ -13,6 +13,7 @@ public class GeneralConfigHolder {
     // Damage modifiers
     private double pearlDamageSelf = 5;
     private double pearlDamageOther = 2;
+    private int noDamageTicksAfterTeleport = 0;
 
     // The pearl cooldown in seconds
     private double pearlCooldown = 0.5;
@@ -24,6 +25,9 @@ public class GeneralConfigHolder {
         // Load disable endermites
         disableEndermites = config.getBoolean("disable-endermites", disableEndermites);
         endermiteChance = config.getDouble("endermite-chance", endermiteChance);
+
+        // Load no damage ticks after teleport.
+        noDamageTicksAfterTeleport = config.getInt("teleport-no-damage-ticks");
 
         // Load pearl damage self
         pearlDamageSelf = config.getDouble("pearl-damage-self", pearlDamageSelf);
@@ -68,5 +72,9 @@ public class GeneralConfigHolder {
 
     public double getEndermiteChance() {
         return endermiteChance;
+    }
+
+    public int getNoDamageTicksAfterTeleport() {
+        return noDamageTicksAfterTeleport;
     }
 }
