@@ -1,5 +1,6 @@
 package com.arkflame.flamepearls.listeners;
 
+import com.arkflame.flamepearls.managers.TeleportDataManager;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.World;
@@ -18,11 +19,13 @@ import com.arkflame.flamepearls.utils.LocationUtil;
 
 public class ProjectileHitListener implements Listener {
     private OriginManager originManager;
+    private TeleportDataManager teleportDataManager;
     private Sound sound;
     private double endermiteChance;
 
-    public ProjectileHitListener(OriginManager originManager, GeneralConfigHolder generalConfigHolder) {
+    public ProjectileHitListener(TeleportDataManager teleportDataManager, OriginManager originManager, GeneralConfigHolder generalConfigHolder) {
         this.originManager = originManager;
+        this.teleportDataManager = teleportDataManager;
         this.sound = generalConfigHolder.getPearlSound();
         this.endermiteChance = generalConfigHolder.getEndermiteChance();
     }
@@ -51,6 +54,7 @@ public class ProjectileHitListener implements Listener {
                     Location safeLocation = LocationUtil.findSafeLocation(location, origin != null ? origin : location, world);
                     // Will teleport
                     originManager.setAsWillTeleport(player);
+                    teleportDataManager.add(player);
                     // Teleport the player to that location
                     player.teleport(safeLocation.setDirection(player.getLocation().getDirection()), TeleportCause.ENDER_PEARL);
                     // Spawn endermite if chance is higher
