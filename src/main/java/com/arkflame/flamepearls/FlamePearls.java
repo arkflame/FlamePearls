@@ -1,5 +1,6 @@
 package com.arkflame.flamepearls;
 
+import com.arkflame.flamepearls.managers.TeleportDataManager;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
@@ -9,7 +10,7 @@ import com.arkflame.flamepearls.commands.FlamePearlsCommand;
 import com.arkflame.flamepearls.config.GeneralConfigHolder;
 import com.arkflame.flamepearls.config.MessagesConfigHolder;
 import com.arkflame.flamepearls.listeners.CreatureSpawnListener;
-import com.arkflame.flamepearls.listeners.EntityDamageByEntityListener;
+import com.arkflame.flamepearls.listeners.EntityDamageListener;
 import com.arkflame.flamepearls.listeners.PlayerInteractListener;
 import com.arkflame.flamepearls.listeners.PlayerQuitListener;
 import com.arkflame.flamepearls.listeners.PlayerTeleportListener;
@@ -22,6 +23,7 @@ public class FlamePearls extends JavaPlugin implements Listener {
     // Managers
     private OriginManager originManager;
     private CooldownManager cooldownManager;
+    private TeleportDataManager teleportDataManager;
 
     // Config
     private GeneralConfigHolder generalConfigHolder;
@@ -47,6 +49,8 @@ public class FlamePearls extends JavaPlugin implements Listener {
         // Create the origin manager
         originManager = new OriginManager();
 
+        teleportDataManager = new TeleportDataManager();
+
         // Create the cooldown manager
         cooldownManager = new CooldownManager(generalConfigHolder);
 
@@ -55,13 +59,13 @@ public class FlamePearls extends JavaPlugin implements Listener {
         // Register CreatureSpawnListener
         pluginManager.registerEvents(new CreatureSpawnListener(generalConfigHolder), this);
         // Register EntityDamageByEntityListener
-        pluginManager.registerEvents(new EntityDamageByEntityListener(generalConfigHolder), this);
+        pluginManager.registerEvents(new EntityDamageListener(teleportDataManager, generalConfigHolder), this);
         // Register Player Interact Listener
         pluginManager.registerEvents(new PlayerInteractListener(cooldownManager, messagesConfigHolder), this);
         // Register Player quit listener
-        pluginManager.registerEvents(new PlayerQuitListener(cooldownManager), this);
+        pluginManager.registerEvents(new PlayerQuitListener(teleportDataManager, cooldownManager), this);
         // Register PlayerTeleportListener
-        pluginManager.registerEvents(new PlayerTeleportListener(generalConfigHolder, originManager), this);
+        pluginManager.registerEvents(new PlayerTeleportListener(originManager), this);
         // Register ProjectileHitListener
         pluginManager.registerEvents(new ProjectileHitListener(originManager, generalConfigHolder), this);
         // Register ProjectileLaunchListener

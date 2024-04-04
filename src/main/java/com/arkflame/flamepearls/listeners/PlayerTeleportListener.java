@@ -10,10 +10,8 @@ import com.arkflame.flamepearls.managers.OriginManager;
 
 public class PlayerTeleportListener implements Listener {
     private OriginManager originManager;
-    private GeneralConfigHolder configHolder;
 
-    public PlayerTeleportListener(GeneralConfigHolder configHolder, OriginManager originManager) {
-        this.configHolder = configHolder;
+    public PlayerTeleportListener(OriginManager originManager) {
         this.originManager = originManager;
     }
     
@@ -24,8 +22,6 @@ public class PlayerTeleportListener implements Listener {
             if (originManager.canTeleport(event.getPlayer())) {
                 // Teleported
                 originManager.setAsTeleported(event.getPlayer());
-                // Set no damage ticks for spoof player damage if player is falling.
-                event.getPlayer().setNoDamageTicks(configHolder.getNoDamageTicksAfterTeleport());
 
                 return; 
             }

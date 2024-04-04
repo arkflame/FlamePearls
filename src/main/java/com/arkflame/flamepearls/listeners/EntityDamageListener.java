@@ -1,17 +1,24 @@
 package com.arkflame.flamepearls.listeners;
 
+import com.arkflame.flamepearls.managers.TeleportDataManager;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import com.arkflame.flamepearls.config.GeneralConfigHolder;
+import org.bukkit.event.entity.EntityDamageEvent;
 
-public class EntityDamageByEntityListener implements Listener {
+import java.util.List;
+
+public class EntityDamageListener implements Listener {
     private GeneralConfigHolder generalConfigHolder;
+    private TeleportDataManager teleportDataManager;
     
-    public EntityDamageByEntityListener(GeneralConfigHolder generalConfigHolder) {
+    public EntityDamageListener(TeleportDataManager teleportDataManager, GeneralConfigHolder generalConfigHolder) {
+        this.teleportDataManager = teleportDataManager;
         this.generalConfigHolder = generalConfigHolder;
     }
     
@@ -32,6 +39,26 @@ public class EntityDamageByEntityListener implements Listener {
                 // Set the self damage
                 event.setDamage(generalConfigHolder.getPearlDamageSelf());
             }
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onEntityDamage(EntityDamageEvent event) {
+        if(event.getCause() != EntityDamageEvent.DamageCause.FALL
+                || !(event.getEntity() instanceof Player)) {
+            return;
+        }
+
+        Player player = (Player) event.getEntity();
+
+        if(!teleportDataManager.users.containsKey(player)) {
+            return;
+        }
+
+        long time = teleportDataManager.users.get(player);
+
+        if(System.currentTimeMillis() - time < generalConfigHolder.getNoDamageTicksAfterTeleport() * 50L) {
+            event.setCancelled(true);
         }
     }
 }
