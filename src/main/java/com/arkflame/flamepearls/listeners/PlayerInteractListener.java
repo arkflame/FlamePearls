@@ -2,6 +2,7 @@ package com.arkflame.flamepearls.listeners;
 
 import java.text.DecimalFormat;
 
+import com.arkflame.flamepearls.utils.MessageUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -52,7 +53,8 @@ public class PlayerInteractListener implements Listener {
                     // Update pearl item
                     inventory.setItem(inventory.getHeldItemSlot(), heldItem);
                     // Send a message to the player
-                    player.sendMessage(messagesConfigHolder.getMessage("cooldown").replace("{time}", cooldownSeconds));
+                    MessageUtil.sendMessage(player, messagesConfigHolder.getMessage("cooldown")
+                            .replace("{time}", cooldownSeconds));
                 } else {
                     // Set the current time as last pearl thrown
                     cooldownManager.updateLastPearl(player);
