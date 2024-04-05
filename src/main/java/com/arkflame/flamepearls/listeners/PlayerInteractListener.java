@@ -9,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import com.arkflame.flamepearls.config.MessagesConfigHolder;
 import com.arkflame.flamepearls.managers.CooldownManager;
@@ -29,8 +30,11 @@ public class PlayerInteractListener implements Listener {
             // Get the player who interacted
             Player player = event.getPlayer();
 
+            // Get the player inventory
+            PlayerInventory inventory = player.getInventory();
+
             // Get the held item
-            ItemStack heldItem = player.getInventory().getItem(player.getInventory().getHeldItemSlot());
+            ItemStack heldItem = inventory.getItem(inventory.getHeldItemSlot());
 
             // Check if the player is holding an ender pearl in their main hand
             if (heldItem != null && heldItem.getType() == Material.ENDER_PEARL) {
@@ -45,6 +49,8 @@ public class PlayerInteractListener implements Listener {
                     String cooldownSeconds = df.format(cooldown);
                     // Cancel the interaction event
                     event.setCancelled(true);
+                    // Update pearl item
+                    inventory.setItem(inventory.getHeldItemSlot(), heldItem);
                     // Send a message to the player
                     player.sendMessage(messagesConfigHolder.getMessage("cooldown").replace("{time}", cooldownSeconds));
                 } else {
