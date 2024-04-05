@@ -13,6 +13,7 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.projectiles.ProjectileSource;
 
+import com.arkflame.flamepearls.FlamePearls;
 import com.arkflame.flamepearls.config.GeneralConfigHolder;
 import com.arkflame.flamepearls.managers.OriginManager;
 import com.arkflame.flamepearls.utils.LocationUtil;
@@ -51,7 +52,7 @@ public class ProjectileHitListener implements Listener {
                     // Get the world of the location
                     World world = location.getWorld();
                     // Try to find the nearest safest position
-                    Location safeLocation = LocationUtil.findSafeLocation(location, origin != null ? origin : location, world);
+                    Location safeLocation = LocationUtil.findSafeLocation(location, origin, world);
                     // Will teleport
                     originManager.setAsWillTeleport(player);
                     teleportDataManager.add(player);
@@ -66,6 +67,8 @@ public class ProjectileHitListener implements Listener {
                         // Play sound
                         world.playSound(safeLocation, sound, 5, 1f);
                     }
+                } else {
+                    FlamePearls.getInstance().getLogger().severe("Error while teleporting player with enderpearl. Origin should not be null. ¿Caused by another plugin?");
                 }
             }
         }

@@ -8,10 +8,7 @@ endermite-chance: 0.1
 pearl-damage-self: 5
 pearl-damage-other: 2
 
-# Ender pearl eleport no damage ticks
-# When a player falls and an ender purl teleports him,
-# player takes damage from the fall,
-# this delay in ticks sets the time after the teleport during which the player will not take damage.
+# Deal no damage to players after teleport for this amount of ticks
 teleport-no-damage-ticks: 5
 
 # Pearl cooldown in seconds
