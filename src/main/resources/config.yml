@@ -8,6 +8,9 @@ endermite-chance: 0.1
 pearl-damage-self: 5
 pearl-damage-other: 2
 
+# Deal no damage to players after teleport for this amount of ticks
+teleport-no-damage-ticks: 5
+
 # Pearl cooldown in seconds
 pearl-cooldown: 0.5
 

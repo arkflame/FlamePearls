@@ -21,6 +21,7 @@ public class PlayerTeleportListener implements Listener {
             if (originManager.canTeleport(event.getPlayer())) {
                 // Teleported
                 originManager.setAsTeleported(event.getPlayer());
+
                 return; 
             }
             // Cancel the event
