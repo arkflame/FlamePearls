@@ -3,18 +3,31 @@ package com.arkflame.flamepearls.utils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 
 public class LocationUtil {
+    // Check if the type is AIR or CARPET
+    public static boolean isSafe(Material type) {
+        if (type == null) {
+            return true;
+        }
+
+        String typeName = type.name();
+        return type == Material.AIR ||
+                typeName.endsWith("CARPET");
+    }
+
     // A helper method that finds the nearest safest location from a given location,
     // origin and world
     public static Location findSafeLocation(Location location, Location origin, World world) {
         // Clone the original location
         Location clone = location.clone();
+        Block originalBlock = location.getBlock();
 
         // Check if location is already safe
-        if (clone.getBlock().getType() == Material.AIR && clone.add(0, 1, 0).getBlock().getType() == Material.AIR) {
+        if (isSafe(originalBlock.getType()) && isSafe(clone.add(0, 1, 0).getBlock().getType())) {
             // Return the fixed location
-            return location.getBlock().getLocation().add(0.5, 0, 0.5);
+            return originalBlock.getLocation().add(0.5, 0, 0.5);
         }
 
         // Get the coordinates of the location
