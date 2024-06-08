@@ -13,7 +13,13 @@ public class LocationUtil {
         }
 
         String typeName = type.name();
-        return type == Material.AIR ||
+        return 
+                type == Material.AIR ||
+                typeName.equals("REDSTONE") ||
+                typeName.equals("TRIPWIRE_HOOK") ||
+                typeName.endsWith("PRESSURE_PLATE") ||
+                typeName.equals("TALL_GRASS") ||
+                typeName.equals("LONG_GRASS") ||
                 typeName.endsWith("CARPET");
     }
 
