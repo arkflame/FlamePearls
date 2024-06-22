@@ -1,5 +1,9 @@
 package com.arkflame.flamepearls.config;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+
 import org.bukkit.Sound;
 import org.bukkit.configuration.Configuration;
 
@@ -20,6 +24,8 @@ public class GeneralConfigHolder {
 
     // Sound played when teleporting
     private Sound pearlSound = null;
+
+    private Collection<String> disabledWorlds = null;
 
     public void load(Configuration config) {
         // Load disable endermites
@@ -47,6 +53,13 @@ public class GeneralConfigHolder {
             pearlSound = Sound.valueOf(pearlSoundName);
         } catch (IllegalArgumentException ex) {
             FlamePearls.getInstance().getLogger().warning("Invalid pearl sound: " + pearlSoundName);
+        }
+
+        // Load disabled worlds
+        disabledWorlds = config.getStringList("disabled-worlds");
+        // Convert to hashset for performance
+        if (disabledWorlds != null) {
+            disabledWorlds = new HashSet<>(disabledWorlds);
         }
     }
 
@@ -76,5 +89,9 @@ public class GeneralConfigHolder {
 
     public int getNoDamageTicksAfterTeleport() {
         return noDamageTicksAfterTeleport;
+    }
+
+    public Collection<String> getDisabledWorlds() {
+        return disabledWorlds == null ? Collections.emptySet() : disabledWorlds;
     }
 }

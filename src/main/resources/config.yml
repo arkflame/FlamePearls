@@ -17,6 +17,9 @@ pearl-cooldown: 0.5
 # Sound played when teleporing
 pearl-sound: ENDERMAN_TELEPORT
 
+# Worlds to disablle pearl fixer
+disabled-worlds: []
+
 messages:
   no-permission: "&cYou require the permission&e '{permission}'&c to use this command!"
   reloaded: "&aFlamePearls by ArkFlame Development was reloaded!"

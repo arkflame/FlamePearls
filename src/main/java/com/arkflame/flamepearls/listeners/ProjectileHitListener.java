@@ -1,6 +1,9 @@
 package com.arkflame.flamepearls.listeners;
 
 import com.arkflame.flamepearls.managers.TeleportDataManager;
+
+import java.util.Collection;
+
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.World;
@@ -45,20 +48,25 @@ public class ProjectileHitListener implements Listener {
             if (shooter instanceof Player) {
                 // Cast the shooter of the pearl
                 Player player = (Player) shooter;
-                // Get the location where the pearl landed
-                Location location = projectile.getLocation();
                 // Get the location where the pearl was thrown from
                 Location origin = originManager.getOriginAndRemove(projectile);
 
                 if (origin != null) {
+                    // Get the location where the pearl landed
+                    Location location = projectile.getLocation();
                     // Get the world of the location
                     World world = location.getWorld();
+                    // Get disabled worlds
+                    Collection<String> disabledWorlds = generalConfigHolder.getDisabledWorlds();
+                    // Teleport the player to that location if not disabled
+                    if (disabledWorlds.contains(world.getName())) {
+                        return;
+                    }
                     // Try to find the nearest safest position
                     Location safeLocation = LocationUtil.findSafeLocation(location, origin, world);
                     // Will teleport
                     originManager.setAsWillTeleport(player);
                     teleportDataManager.add(player);
-                    // Teleport the player to that location
                     player.teleport(safeLocation.setDirection(player.getLocation().getDirection()), TeleportCause.ENDER_PEARL);
                     // Dealing damage to the player as done in vanilla when teleporting.
                     double damage = generalConfigHolder.getPearlDamageSelf();
